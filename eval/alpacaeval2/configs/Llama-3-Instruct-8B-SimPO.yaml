@@ -5,7 +5,9 @@ Llama-3-Instruct-8B-SimPO:
     max_new_tokens: 4096
     model_kwargs:
       torch_dtype: bfloat16
-    model_name: princeton-nlp/Llama-3-Instruct-8B-SimPO
+    # model_name: princeton-nlp/Llama-3-Instruct-8B-SimPO
+    model_name: /tf/model/Llama3/Meta-Llama-3-8B-Instruct
+    # model_name: /tf/orion.zou/repos/SimPO/outputs/llama-3-8b-instruct-simpo
     stop_token_ids:
     - 128001
     - 128009
@@ -13,4 +15,4 @@ Llama-3-Instruct-8B-SimPO:
     top_p: 1.0
   fn_completions: vllm_local_completions
   pretty_name: Llama-3-Instruct-8B-SimPO
-  prompt_template: templates/llama3.txt
+  prompt_template: /tf/orion.zou/repos/SimPO/eval/alpacaeval2/templates/llama3.txt

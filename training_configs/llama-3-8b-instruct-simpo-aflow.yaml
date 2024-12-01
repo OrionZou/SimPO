@@ -6,12 +6,21 @@ torch_dtype: null
 attn_implementation: flash_attention_2
 
 # Data training arguments
+
 dataset_mixer:
-  princeton-nlp/llama3-ultrafeedback: 1.0
+  /tf/orion.zou/dataset/aflow_v2/pair_wise/aflow_v2_paw_train_9475_transformed.json: 1.0
+  /tf/orion.zou/dataset/aflow_v2/pair_wise/aaflow_v2_paw_test_671_transformed.json: 1.0
 dataset_splits:
 - train
 - test
 preprocessing_num_workers: 12
+
+# dataset_mixer:
+#   princeton-nlp/llama3-ultrafeedback: 1.0
+# dataset_splits:
+# - train
+# - test
+# preprocessing_num_workers: 12
 
 # SimPOTrainer arguments
 bf16: true
@@ -33,8 +42,8 @@ max_length: 2048
 max_prompt_length: 1800
 num_train_epochs: 1
 optim: adamw_torch
-output_dir: outputs/llama-3-8b-instruct-simpo
-run_name: llama-3-8b-instruct-simpo
+output_dir: outputs/llama-3-8b-instruct-simpo-aflow-2
+run_name: llama-3-8b-instruct-simpo-aflow-2
 per_device_train_batch_size: 2
 per_device_eval_batch_size: 4
 push_to_hub: false

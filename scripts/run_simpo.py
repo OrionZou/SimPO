@@ -15,7 +15,7 @@
 # limitations under the License.
 import logging
 import random
-import sys
+import sys, os
 
 import torch
 import transformers
@@ -155,16 +155,29 @@ def main():
     ###############
     # Load datasets
     ###############
-    raw_datasets = get_datasets(
-        data_args,
-        splits=data_args.dataset_splits,
-        configs=data_args.dataset_configs,
-        columns_to_keep=["messages", "chosen", "rejected", "prompt", "completion", "label"],
-        # seed=training_args.seed,
-    )
-    logger.info(
-        f"Training on the following splits: {[split + ' : ' + str(dset.num_rows) for split, dset in raw_datasets.items()]}"
-    )
+
+    use_alow_dataset=True
+    if use_alow_dataset:
+        from datasets import DatasetDict, load_dataset
+        raw_datasets = DatasetDict()
+        for fp in data_args.dataset_mixer.keys():
+            if "train" in fp:
+                tmp_dataset = load_dataset(path= os.path.dirname(fp), data_files= os.path.basename(fp))
+                raw_datasets["train"] = tmp_dataset["train"]
+            if "test" in fp:
+                tmp_dataset = load_dataset(path= os.path.dirname(fp), data_files= os.path.basename(fp))
+                raw_datasets["test"] = tmp_dataset["train"]
+    else:
+        raw_datasets = get_datasets(
+            data_args,
+            splits=data_args.dataset_splits,
+            configs=data_args.dataset_configs,
+            columns_to_keep=["messages", "chosen", "rejected", "prompt", "completion", "label"],
+            # seed=training_args.seed,
+        )
+        logger.info(
+            f"Training on the following splits: {[split + ' : ' + str(dset.num_rows) for split, dset in raw_datasets.items()]}"
+        )
     column_names = list(raw_datasets["train"].features)
 
     #####################################
