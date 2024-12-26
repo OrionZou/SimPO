@@ -162,11 +162,14 @@ def main():
         raw_datasets = DatasetDict()
         for fp in data_args.dataset_mixer.keys():
             if "train" in fp:
-                tmp_dataset = load_dataset(path= os.path.dirname(fp), data_files= os.path.basename(fp))
-                raw_datasets["train"] = tmp_dataset["train"]
+                tmp_dataset = load_dataset(path= os.path.dirname(fp), data_files= os.path.basename(fp),split= f"train[:{int(data_args.dataset_mixer[fp]*100)}%]")
+                # tmp_dataset = load_dataset(path= os.path.dirname(fp), data_files= os.path.basename(fp),split= f"train[:10]")
+                # raw_datasets["train"] = tmp_dataset["train"]
+                raw_datasets["train"] = tmp_dataset
             if "test" in fp:
-                tmp_dataset = load_dataset(path= os.path.dirname(fp), data_files= os.path.basename(fp))
-                raw_datasets["test"] = tmp_dataset["train"]
+                tmp_dataset = load_dataset(path= os.path.dirname(fp), data_files= os.path.basename(fp),split= f"train[:{int(data_args.dataset_mixer[fp]*100)}%]")
+                # raw_datasets["test"] = tmp_dataset["train"]
+                raw_datasets["test"] = tmp_dataset
     else:
         raw_datasets = get_datasets(
             data_args,

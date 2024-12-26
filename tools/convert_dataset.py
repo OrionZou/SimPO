@@ -50,14 +50,14 @@ def transform_dataset_from_file(input_file_path, output_file_path):
 # 程序入口
 if __name__ == "__main__":
     # 示例输入文件路径和输出文件路径
-    input_file = "/tf/orion.zou/dataset/aflow_v2/pair_wise/aflow_v2_paw_train_9475.json"  # 替换为实际输入文件路径
-    output_file = "/tf/orion.zou/dataset/aflow_v2/pair_wise/aflow_v2_paw_train_9475_transformed.json"  # 替换为实际输出文件路径
+    input_file = "/tf/orion.zou/dataset/aflow_v3_2/pair_wise/aflow_v3_2_paw_full_train_21785.json"  # 替换为实际输入文件路径
+    output_file = "/tf/orion.zou/dataset/aflow_v3_2/pair_wise/aflow_v3_2_paw_full_train_21785_transformed.json"  # 替换为实际输出文件路径
     
     # 调用转换函数
     transform_dataset_from_file(input_file, output_file)
 
-    input_file = "/tf/orion.zou/dataset/aflow_v2/pair_wise/aflow_v2_paw_test_671.json"  # 替换为实际输入文件路径
-    output_file = "/tf/orion.zou/dataset/aflow_v2/pair_wise/aaflow_v2_paw_test_671_transformed.json"  # 替换为实际输出文件路径
+    input_file = "/tf/orion.zou/dataset/aflow_v3_2/pair_wise/aflow_v3_2_paw_full_test_2494.json"  # 替换为实际输入文件路径
+    output_file = "/tf/orion.zou/dataset/aflow_v3_2/pair_wise/aflow_v3_2_paw_full_test_2494_transformed.json"  # 替换为实际输出文件路径
     
     # 调用转换函数
     transform_dataset_from_file(input_file, output_file)

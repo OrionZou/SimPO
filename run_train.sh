@@ -8,9 +8,13 @@ export WANDB_API_KEY=e6ac95c0632c01460f1eecac9c0c89f15ef08066
 
 export PYTHONPATH=.:$PYTHONPATH
 
+CUDA_VISIBLE_DEVICES=3,7 nohup accelerate launch --config_file accelerate_configs/deepspeed_zero3.yaml --main_process_port 29501 --num_processes 2 scripts/run_simpo.py training_configs/llama-3-8b-instruct-simpo-aflow_v3_2.yaml  > llama-3-8b-instruct-simpo-alow-3.log 2>&1 &
+
+# CUDA_VISIBLE_DEVICES=4 nohup accelerate launch --config_file accelerate_configs/deepspeed_zero3.yaml --main_process_port 29501 --num_processes 1 scripts/run_simpo.py training_configs/llama-3-8b-instruct-simpo-aflow_v3_2.yaml  > llama-3-8b-instruct-simpo-alow-3_1.log 2>&1 &
+
 # CUDA_VISIBLE_DEVICES=2,3,4,5 nohup accelerate launch --config_file accelerate_configs/deepspeed_zero3.yaml scripts/run_simpo.py training_configs/llama-3-8b-instruct-simpo-aflow.yaml > llama-3-8b-instruct-simpo-alow-2.log 2>&1 &
 
 # CUDA_VISIBLE_DEVICES=2,3,4,5 python scripts/run_simpo.py training_configs/llama-3-8b-instruct-simpo-aflow.yaml 
 
 # python test_wandb.py
-wandb sync  /tf/orion.zou/repos/SimPO/wandb/offline-run-20241201_074324-4kcss4ly
+# wandb sync  /tf/orion.zou/repos/SimPO/wandb/offline-run-20241225_151746-nk3azo8y
