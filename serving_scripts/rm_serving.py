@@ -65,7 +65,7 @@ def llm_score(llm,tokenizer, querys, answers):
     device=device)
 
     with torch.no_grad():
-        outputs = llm(input_ids=input_ids, attention_mask=attention_mask)
+        outputs = llm(input_ids=input_ids, attention_mask=attention_mask,use_cache=False)
         logits = outputs.logits  # Shape: [batch_size, seq_len, vocab_size]
 
     # 从 answers 开始对齐目标 token
@@ -74,8 +74,7 @@ def llm_score(llm,tokenizer, querys, answers):
 
     batch_size, seq_len, vocab_size = logits.size()
     # 计算 log_probs
-    log_probs = torch.nn.functional.log_softmax(logits, dim=-1)
-    token_log_probs = log_probs.gather(2, target_ids.unsqueeze(-1)).squeeze(-1) 
+    token_log_probs = logits.log_softmax(dim=-1).gather(2, target_ids.unsqueeze(-1)).squeeze(-1) 
 
     # 构建 mask，从 answers 的起始位置开始
     batch_size, seq_len, vocab_size = logits.size()
@@ -83,11 +82,11 @@ def llm_score(llm,tokenizer, querys, answers):
     mask = range_tensor >= answers_starts_tensor.unsqueeze(1)  # 从 answers 开始
 
     # 应用 mask 截取 logits 和目标 token
-    masked_token_log_probs = token_log_probs.mul(mask).mul(attention_mask[:,:-1])  # [batch_size, seq_len]
-
+    mask = mask.mul(attention_mask[:,:-1]) 
     # SimPO reward
     beta=2.5
-    batch_score = (masked_token_log_probs.mean(dim=1) * beta).tolist()
+    batch_score = ((token_log_probs * mask).sum(dim=-1) / mask.sum(-1) * beta).tolist()
+    # import ipdb;ipdb.set_trace()
     return batch_score
 
 # 创建全局 LLM 引擎实例

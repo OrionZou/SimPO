@@ -4,4 +4,4 @@ CUDA_VISIBLE_DEVICES=7 nohup vllm serve /tf/orion.zou/repos/SimPO/outputs/llama-
 
 
 # CUDA_VISIBLE_DEVICES=7 nohup python vllm_serving.py > vllm_serving.log 2>&1 &
-CUDA_VISIBLE_DEVICES=4 python serving_scripts/rm_serving.py --model /tf/orion.zou/repos/SimPO/outputs/llama-3-8b-instruct-simpo-aflow-3 --port 8082 --host 0.0.0.0 --max_batch_size 32
+CUDA_VISIBLE_DEVICES=4 nohup python serving_scripts/rm_serving.py --model /tf/orion.zou/repos/SimPO/outputs/llama-3-8b-instruct-simpo-aflow-3 --port 8082 --host 0.0.0.0 --max_batch_size 32  > rm_serving.log 2>&1 &
