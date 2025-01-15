@@ -14,7 +14,7 @@ def parse_args():
                        default="/tf/orion.zou/dataset/aflow_v3_2/pair_wise/aflow_v3_2_paw_full_test_2494.json",
                        help="input file")
     parser.add_argument('--url', type=str,
-                       default="http://server1.zhaojunhua.org:89/v3/v1/reward",
+                       default="http://server1.zhaojunhua.org:89/v7/v1/reward",
                        help="url")
     parser.add_argument('--batch_size', type=int,
                        default=32,
