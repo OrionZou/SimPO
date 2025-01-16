@@ -156,8 +156,8 @@ def main():
     # Load datasets
     ###############
 
-    use_alow_dataset=True
-    if use_alow_dataset:
+    use_aflow_dataset=False
+    if use_aflow_dataset:
         from datasets import DatasetDict, load_dataset
         raw_datasets = DatasetDict()
         for fp in data_args.dataset_mixer.keys():
