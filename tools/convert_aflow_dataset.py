@@ -1,5 +1,17 @@
 import json
 import os
+import argparse
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description='argparse')
+    parser.add_argument('--input_file_path', type=str,
+                       default="/tf/orion.zou/dataset/aflow_v3_2/pair_wise/aflow_v3_2_paw_full_train_21785.json",
+                       help="load_dataset_path")
+    parser.add_argument('--output_file_path', type=str,
+                       default="/tf/orion.zou/dataset/aflow_v3_2/pair_wise/aflow_v3_2_paw_full_train_21785_transformed.json",
+                       help="upload_repo_id")
+    return parser.parse_args()
 
 def transform_dataset_from_file(input_file_path, output_file_path):
     try:
@@ -49,15 +61,7 @@ def transform_dataset_from_file(input_file_path, output_file_path):
 
 # 程序入口
 if __name__ == "__main__":
-    # 示例输入文件路径和输出文件路径
-    input_file = "/tf/orion.zou/dataset/aflow_v3_2/pair_wise/aflow_v3_2_paw_full_train_21785.json"  # 替换为实际输入文件路径
-    output_file = "/tf/orion.zou/dataset/aflow_v3_2/pair_wise/aflow_v3_2_paw_full_train_21785_transformed.json"  # 替换为实际输出文件路径
-    
+    args = parse_args()
     # 调用转换函数
-    transform_dataset_from_file(input_file, output_file)
+    transform_dataset_from_file(input_file_path=args.input_file_path, output_file_path=args.output_file_path)
 
-    input_file = "/tf/orion.zou/dataset/aflow_v3_2/pair_wise/aflow_v3_2_paw_full_test_2494.json"  # 替换为实际输入文件路径
-    output_file = "/tf/orion.zou/dataset/aflow_v3_2/pair_wise/aflow_v3_2_paw_full_test_2494_transformed.json"  # 替换为实际输出文件路径
-    
-    # 调用转换函数
-    transform_dataset_from_file(input_file, output_file)
