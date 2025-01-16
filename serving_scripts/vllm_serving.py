@@ -1,5 +1,4 @@
 from fastapi import FastAPI, HTTPException, Request
-from starlette.middleware.timeout import TimeoutMiddleware
 
 from pydantic import BaseModel
 from typing import List
@@ -28,7 +27,6 @@ args = parse_args()
 
 # 创建 FastAPI 实例
 app = FastAPI()
-app.add_middleware(TimeoutMiddleware, timeout=120)
 
 # 创建 vLLM AsyncLLMEngine
 def init_engine():
