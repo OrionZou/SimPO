@@ -10,7 +10,8 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 def parse_args():
     parser = argparse.ArgumentParser(description='vllm reward model config')
     parser.add_argument('--model', type=str,
-                       default="/tf/orion.zou/repos/SimPO/outputs/llama-3-8b-instruct-simpo-aflow-3",
+                       default="/tf/model/Llama3/Meta-Llama-3-8B-Instruct",
+                    #    default="/tf/orion.zou/repos/SimPO/outputs/llama-3-8b-instruct-simpo-aflow-3",
                        help="model path")
     parser.add_argument('--max_batch_size', type=int,
                        default=32,
@@ -25,12 +26,15 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def init_llm():
     tokenizer = AutoTokenizer.from_pretrained(args.model)
+    # import ipdb;ipdb.set_trace()
+    if tokenizer.pad_token is None:
+        tokenizer.add_special_tokens({'pad_token': '<|end_of_text|>'})
     llm = AutoModelForCausalLM.from_pretrained(args.model).to(device) 
     return llm, tokenizer
 
 def llm_score(llm, tokenizer, querys, answers):
     prompts = [query + answer for query, answer in zip(querys, answers)]
-    inputs = tokenizer(prompts, return_tensors="pt", padding=True, truncation=True).to(device)
+    inputs = tokenizer(prompts, return_tensors="pt", padding=True, truncation=True, max_length=8192).to(device)
     input_ids = inputs["input_ids"]  # Token IDs
     attention_mask = inputs["attention_mask"]
     
@@ -73,4 +77,5 @@ if __name__ == "__main__":
         "ANALYZE_REQUIREMENTS_PROMPT = \"\"\"\nAnalyze the given problem and identify the key requirements, constraints, and expected behavior of the solution. Provide a concise summary of these aspects to guide the code generation process.\n\"\"\"\n\nGENERATE_CODE_PROMPT = \"\"\"\nGenerate a Python function to solve the given problem. Ensure the function name matches the entry point specified. Include necessary imports and helper functions. Provide a clear and efficient solution. Focus on correctness and optimal performance. Consider the provided requirements in your implementation.\n\"\"\"\n\nVALIDATE_AND_REFINE_PROMPT = \"\"\"\nReview the given solution for the problem. Validate if it meets all the requirements and constraints. If any issues are found, refine the solution to address them. Ensure the refined solution is complete, efficient, and adheres to best coding practices.\n\"\"\"\n\nIMPROVE_CODE_PROMPT = \"\"\"\nThe previous solution failed to pass the tests. Please analyze the error and provide an improved version of the code. Focus on fixing the specific issues mentioned in the error message while maintaining the overall structure and logic of the function. Ensure that your solution is complete and addresses all aspects of the problem, including the provided requirements.\n\"\"\"\nasync def __call__(self, problem: str, entry_point: str):\n        requirements = await self.custom(input=problem, instruction=prompt_custom.ANALYZE_REQUIREMENTS_PROMPT)\n        \n        solutions = []\n        for _ in range(3):\n            solution = await self.custom_code_generate(problem=problem, entry_point=entry_point, instruction=prompt_custom.GENERATE_CODE_PROMPT + f\"\\nRequirements: {requirements['response']}\")\n            solutions.append(solution['response'])\n        \n        # New step: Validate and refine solutions\n        refined_solutions = []\n"
     ]
     llm, tokenizer = init_llm()
-    llm_score(llm, tokenizer, querys, answers)
+    batch_score=llm_score(llm, tokenizer, querys, answers)
+    print(batch_score)

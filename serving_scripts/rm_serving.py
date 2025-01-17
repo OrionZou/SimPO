@@ -49,12 +49,14 @@ class GenerateResponse(BaseModel):
 
 async def init_llm():
     tokenizer = AutoTokenizer.from_pretrained(args.model)
+    if tokenizer.pad_token is None:
+        tokenizer.add_special_tokens({'pad_token': '<|end_of_text|>'})
     llm = AutoModelForCausalLM.from_pretrained(args.model).to(device) 
     return llm, tokenizer
 
 def llm_score(llm,tokenizer, querys, answers):
     prompts = [query + answer for query, answer in zip(querys, answers)]
-    inputs = tokenizer(prompts, return_tensors="pt", padding=True, truncation=True).to(device)
+    inputs = tokenizer(prompts, return_tensors="pt", padding=True, truncation=True, max_length=8192).to(device)
     input_ids = inputs["input_ids"]  # Token IDs
     attention_mask = inputs["attention_mask"]
     
